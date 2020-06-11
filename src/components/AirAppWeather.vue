@@ -4,17 +4,26 @@
       <input v-model="city" class="weather__input" />
       <button class="weather__button">Check</button>
     </div>
+    <div class="weather__box">
+      <AirAppWeatherCurrent :city="city" />
+    </div>
   </div>
 </template>
 
 <script>
-// import { Loader } from "google-maps";
+import AirAppWeatherCurrent from "@/components/AirAppWeatherCurrent.vue";
+
+// const AlgoliaAPIKey = process.env.VUE_APP_ALGOLIA_API_KEY;
+// const AlgoliaApplicationId = process.env.VUE_APP_ALGOLIA_APPLICATION_ID;
 
 export default {
   name: "AirAppWeather",
   data: () => ({
     city: ""
   }),
+  components: {
+    AirAppWeatherCurrent
+  },
   props: {
     data: {
       default: null
@@ -31,9 +40,9 @@ export default {
     async getCity(lat, lng) {
       try {
         const { data } = await this.$http.get(
-          `http://photon.komoot.de/reverse?lon=${lng}&lat=${lat}`
+          `https://places-dsn.algolia.net/1/places/reverse?aroundLatLng=${lat},%20${lng}&hitsPerPage=1`
         );
-        return data.features[0].properties.city;
+        return data.hits[0].city.default[0];
       } catch (error) {
         return "";
       }
@@ -45,7 +54,7 @@ export default {
 <style scoped lang="scss">
 @import "@/styles";
 .weather {
-  width: inherit;
+  width: 100%;
   .weather__city-select {
     width: 100%;
     .weather__button {
@@ -57,7 +66,7 @@ export default {
     }
   }
   .weather__input {
-    background-color: rgba($c1, 0.5);
+    background-color: $c1-2;
     border: 1px solid $c3;
     padding: 1em;
     color: $c2;
@@ -72,13 +81,17 @@ export default {
     cursor: pointer;
     font-weight: bold;
     border-style: hidden;
-    background-color: rgba($c3, 0.5);
+    text-transform: uppercase;
+    background-color: $c3-2;
     padding: 1em;
     color: $c2;
     &:focus {
       outline: 0;
     }
     outline: 0;
+  }
+  .weather__box {
+    margin-top: 1em;
   }
 }
 </style>

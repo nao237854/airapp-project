@@ -7,7 +7,9 @@
         <span class="home__bolded">leave empty for geolocation</span>
       </h5>
     </div>
-    <AirAppWeather :data="location"></AirAppWeather>
+    <div class="home__content">
+      <AirAppWeather :data="location"></AirAppWeather>
+    </div>
   </div>
 </template>
 
@@ -33,7 +35,8 @@ export default {
 
 <style lang="scss">
 @import "@/styles";
-$componentWidth: 25%;
+
+$componentWidth: 40%;
 
 .home {
   display: flex;
@@ -41,6 +44,8 @@ $componentWidth: 25%;
   align-items: center;
   flex-direction: column;
   height: 100vh;
+  max-width: 1264px;
+  margin: 0 auto;
 
   .home__bolded {
     font-weight: bold;
@@ -65,8 +70,36 @@ $componentWidth: 25%;
     }
   }
 
-  .weather {
+  .home__content {
     width: $componentWidth;
+  }
+
+  @media screen and (max-width: 1264px) {
+    $componentWidth: 50%;
+    .home__content {
+      width: $componentWidth;
+    }
+    .home__header {
+      width: $componentWidth;
+    }
+  }
+  @media screen and (max-width: 960px) {
+    $componentWidth: 60%;
+    .home__content {
+      width: $componentWidth;
+    }
+    .home__header {
+      width: $componentWidth;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    $componentWidth: 80%;
+    .home__content {
+      width: $componentWidth;
+    }
+    .home__header {
+      width: $componentWidth;
+    }
   }
 }
 </style>
