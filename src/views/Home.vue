@@ -8,7 +8,7 @@
       </h5>
     </div>
     <div class="home__content">
-      <AirAppWeather :data="location"></AirAppWeather>
+      <AirAppWeather @more="onMoreClick" :data="city"></AirAppWeather>
     </div>
   </div>
 </template>
@@ -21,13 +21,26 @@ export default {
     AirAppWeather
   },
   data: () => ({
-    location: null
+    city: null
   }),
-  created() {
+  async created() {
     if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(pos => {
-        this.location = pos;
+      navigator.geolocation.getCurrentPosition(async pos => {
+        const { data } = await this.$http.get(
+          `https://places-dsn.algolia.net/1/places/reverse?aroundLatLng=${pos.coords.latitude},%20${pos.coords.longitude}&hitsPerPage=1`
+        );
+        this.city = {
+          name: data.hits[0].city.default[0],
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+          country: data.hits[0].country_code.toUpperCase()
+        };
       });
+    }
+  },
+  methods: {
+    onMoreClick(city) {
+      this.$router.push({ name: "more", params: { city } });
     }
   }
 };

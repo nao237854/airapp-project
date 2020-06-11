@@ -1,17 +1,17 @@
 <template>
   <div class="weather">
     <div class="weather__city-select">
-      <input v-model="city" class="weather__input" />
+      <input v-model="city.name" class="weather__input" />
       <button class="weather__button">Check</button>
     </div>
-    <div class="weather__box">
-      <AirAppWeatherCurrent :data="currentWeather" />
+    <div class="weather__info">
+      <AirAppWeatherBox @more="onMoreClick" :data="currentWeather" />
     </div>
   </div>
 </template>
 
 <script>
-import AirAppWeatherCurrent from "@/components/AirAppWeatherCurrent.vue";
+import AirAppWeatherBox from "@/components/AirAppWeatherBox.vue";
 
 export default {
   name: "AirAppWeather",
@@ -20,42 +20,34 @@ export default {
     city: ""
   }),
   components: {
-    AirAppWeatherCurrent
+    AirAppWeatherBox
   },
   props: {
     data: {
-      default: null
+      default: null,
+      type: Object
     }
   },
   watch: {
     data: async function(nv) {
       if (nv) {
-        this.city = await this.getCity(nv.coords.latitude, nv.coords.longitude);
-        this.currentWeather = await this.getWeather(this.city);
+        this.city = nv;
+        this.currentWeather = await this.getWeather(nv);
       }
     }
   },
   methods: {
-    async getCity(lat, lng) {
-      try {
-        const { data } = await this.$http.get(
-          `https://places-dsn.algolia.net/1/places/reverse?aroundLatLng=${lat},%20${lng}&hitsPerPage=1`
-        );
-        return data.hits[0].city.default[0];
-      } catch (error) {
-        return "";
-      }
+    onMoreClick() {
+      this.$emit("more", this.city);
     },
     async getWeather(city) {
       try {
         const { data } = await this.$http.get(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city}&&units=metric&appid=${process.env.VUE_APP_OPENWEATHERMAP_API_KEY}`
+          `https://api.openweathermap.org/data/2.5/onecall?lat=${city.lat}&lon=${city.lng}&units=metric&exclude=daily,minutely,hourly&appid=${process.env.VUE_APP_OPENWEATHERMAP_API_KEY}`
         );
-        data.parsedDt = new Date(data.dt * 1000).toLocaleDateString();
-        data.main.temp = Math.round(data.main.temp);
-        return data;
+        return { current: data.current, city };
       } catch (error) {
-        return "";
+        return null;
       }
     }
   }
@@ -101,7 +93,7 @@ export default {
     }
     outline: 0;
   }
-  .weather__box {
+  .weather__info {
     margin-top: 1em;
   }
 }
