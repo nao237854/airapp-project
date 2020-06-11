@@ -30,25 +30,10 @@
 <script>
 export default {
   name: "AirAppWeatherCurrent",
-  data: () => ({
-    data: null
-  }),
   props: {
-    city: {
+    data: {
       default: null,
-      type: String
-    }
-  },
-  watch: {
-    city: async function(nv) {
-      if (nv) {
-        const { data } = await this.$http.get(
-          `https://api.openweathermap.org/data/2.5/weather?q=${nv}&units=metric&appid=${process.env.VUE_APP_OPENWEATHERMAP_API_KEY}`
-        );
-        this.data = data;
-        this.data.parsedDt = new Date(this.data.dt * 1000).toLocaleDateString();
-        this.data.main.temp = Math.round(this.data.main.temp);
-      }
+      type: Object
     }
   }
 };

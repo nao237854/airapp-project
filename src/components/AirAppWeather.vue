@@ -5,7 +5,7 @@
       <button class="weather__button">Check</button>
     </div>
     <div class="weather__box">
-      <AirAppWeatherCurrent :city="city" />
+      <AirAppWeatherCurrent :data="currentWeather" />
     </div>
   </div>
 </template>
@@ -13,12 +13,10 @@
 <script>
 import AirAppWeatherCurrent from "@/components/AirAppWeatherCurrent.vue";
 
-// const AlgoliaAPIKey = process.env.VUE_APP_ALGOLIA_API_KEY;
-// const AlgoliaApplicationId = process.env.VUE_APP_ALGOLIA_APPLICATION_ID;
-
 export default {
   name: "AirAppWeather",
   data: () => ({
+    currentWeather: null,
     city: ""
   }),
   components: {
@@ -33,6 +31,7 @@ export default {
     data: async function(nv) {
       if (nv) {
         this.city = await this.getCity(nv.coords.latitude, nv.coords.longitude);
+        this.currentWeather = await this.getWeather(this.city);
       }
     }
   },
@@ -43,6 +42,18 @@ export default {
           `https://places-dsn.algolia.net/1/places/reverse?aroundLatLng=${lat},%20${lng}&hitsPerPage=1`
         );
         return data.hits[0].city.default[0];
+      } catch (error) {
+        return "";
+      }
+    },
+    async getWeather(city) {
+      try {
+        const { data } = await this.$http.get(
+          `https://api.openweathermap.org/data/2.5/weather?q=${city}&&units=metric&appid=${process.env.VUE_APP_OPENWEATHERMAP_API_KEY}`
+        );
+        data.parsedDt = new Date(data.dt * 1000).toLocaleDateString();
+        data.main.temp = Math.round(data.main.temp);
+        return data;
       } catch (error) {
         return "";
       }
