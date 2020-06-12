@@ -25,17 +25,21 @@ export default {
   }),
   async created() {
     if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(async pos => {
-        const { data } = await this.$http.get(
-          `https://places-dsn.algolia.net/1/places/reverse?aroundLatLng=${pos.coords.latitude},%20${pos.coords.longitude}&hitsPerPage=1`
-        );
-        this.city = {
-          name: data.hits[0].city.default[0],
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-          country: data.hits[0].country_code.toUpperCase()
-        };
-      });
+      if (!this.$route.params.city) {
+        navigator.geolocation.getCurrentPosition(async pos => {
+          const { data } = await this.$http.get(
+            `https://places-dsn.algolia.net/1/places/reverse?aroundLatLng=${pos.coords.latitude},%20${pos.coords.longitude}&hitsPerPage=1`
+          );
+          this.city = {
+            name: data.hits[0].city.default[0],
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            countryCode: data.hits[0].country_code.toUpperCase()
+          };
+        });
+      } else {
+        this.city = this.$route.params.city;
+      }
     }
   },
   methods: {

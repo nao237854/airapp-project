@@ -2,6 +2,7 @@
   <div class="more">
     <div class="more__header">
       <h1>AirApp</h1>
+      <span @click="goBack()" class="more__back more__bolded">Go back</span>
     </div>
     <div class="more__content">
       <AirAppWeatherMore :data="weather" />
@@ -33,6 +34,12 @@ export default {
       } catch (error) {
         return "";
       }
+    },
+    goBack() {
+      this.$router.push({
+        name: "home",
+        params: { city: this.$route.params.city }
+      });
     }
   }
 };
@@ -59,8 +66,15 @@ $componentWidth: 40%;
   .more__header {
     width: $componentWidth;
     color: $c2;
+    display: flex;
+    justify-content: space-between;
     h1 {
       font-size: 1.8em;
+    }
+    .more__back {
+      align-self: flex-end;
+      margin: 0 0 1em 0;
+      cursor: pointer;
     }
   }
 

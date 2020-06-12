@@ -14,5 +14,10 @@ body {
   background-size: cover;
 
   margin: 0;
+
+  // input[type="search"]::-webkit-search-cancel-button {
+  //   /* Remove default */
+  //   -webkit-appearance: none;
+  // }
 }
 </style>

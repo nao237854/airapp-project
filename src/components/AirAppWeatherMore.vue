@@ -10,7 +10,7 @@
       <div class="weather-more__detail">
         <div class="weather-more__detail-property">Location:</div>
         <div class="weather-more__detail-value">
-          {{ data.city.name }}, {{ data.city.country }}
+          {{ data.city.name }}, {{ data.city.countryCode }}
         </div>
       </div>
     </div>

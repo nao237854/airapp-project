@@ -6,12 +6,12 @@
     <div class="weather-box__details">
       <div class="weather-box__detail">
         <div class="weather-box__detail-property">Date:</div>
-        <div class="weather-box__detail-value">{{ data.parsedDt }}</div>
+        <div class="weather-box__detail-value">{{ data.current.parsedDt }}</div>
       </div>
       <div class="weather-box__detail">
         <div class="weather-box__detail-property">Location:</div>
         <div class="weather-box__detail-value">
-          {{ data.city.name }}, {{ data.city.country }}
+          {{ data.city.name }}, {{ data.city.countryCode }}
         </div>
       </div>
       <div class="weather-box__detail">
