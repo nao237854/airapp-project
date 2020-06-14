@@ -3,9 +3,7 @@ import AirAppWeatherBox from "@/components/AirAppWeatherBox.vue";
 import flushPromises from "flush-promises";
 
 describe("AirAppWeatherBox", () => {
-  const realDateToLocaleDateString = Date.prototype.toLocaleDateString.bind(
-    global.Date
-  );
+  const realDateToLocaleDateString = Date.prototype.toLocaleDateString;
 
   let weather;
 
@@ -36,13 +34,14 @@ describe("AirAppWeatherBox", () => {
         ]
       },
       city: {
-        name: "Poznań"
+        name: "Poznań",
+        countryCode: "PL"
       }
     };
   });
 
   afterEach(() => {
-    global.Date.prototype.toLocaleDateString = realDateToLocaleDateString;
+    Date.prototype.toLocaleDateString = realDateToLocaleDateString;
   });
 
   it("temp degree should be rounded", async () => {
@@ -60,7 +59,7 @@ describe("AirAppWeatherBox", () => {
     wrapper.setProps({ data: weather });
 
     const toLocaleDateStringStub = jest.fn(() => "6/14/2020");
-    global.Date.prototype.toLocaleDateString = toLocaleDateStringStub;
+    Date.prototype.toLocaleDateString = toLocaleDateStringStub;
 
     await flushPromises();
 

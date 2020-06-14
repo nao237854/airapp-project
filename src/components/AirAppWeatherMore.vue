@@ -1,13 +1,13 @@
 <template>
   <div v-if="data" class="weather-more">
     <div class="weather-more__details">
-      <div class="weather-more__detail">
+      <div data-key="date" class="weather-more__detail">
         <div class="weather-more__detail-property">Date:</div>
         <div class="weather-more__detail-value">
           {{ data.current.parsedDt }}
         </div>
       </div>
-      <div class="weather-more__detail">
+      <div data-key="location" class="weather-more__detail">
         <div class="weather-more__detail-property">Location:</div>
         <div class="weather-more__detail-value">
           {{ data.city.name }}, {{ data.city.countryCode }}
@@ -25,11 +25,11 @@
         :key="weather.dt"
         class="weather-more__row"
       >
-        <div class="weather-more__col">{{ weather.hour }}</div>
-        <div class="weather-more__col">
+        <div data-key="hour" class="weather-more__col">{{ weather.hour }}</div>
+        <div data-key="temp" class="weather-more__col">
           {{ weather.temp }}<span style="font-weight:normal">°</span>C
         </div>
-        <div class="weather-more__col">
+        <div data-key="description" class="weather-more__col">
           {{ weather.weather[0].description }}
         </div>
       </div>
@@ -54,7 +54,7 @@ export default {
         ).toLocaleDateString();
 
         nv.hourly = nv.hourly.filter((weather, index) => {
-          const now = new Date();
+          const now = new Date(Date.now());
           const weatherDate = new Date(weather.dt * 1000);
           return !(index % 3) && now.getDate() === weatherDate.getDate();
         });
