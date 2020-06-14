@@ -25,8 +25,8 @@ describe("AirAppWeather", () => {
 
     await flushPromises();
 
-    const inputPlaces = wrapper.find(`.weather__input`);
-    expect(inputPlaces.props().value).toMatch("Poznań");
+    const inputPlacesElm = wrapper.find(`.weather__input`);
+    expect(inputPlacesElm.props().value).toMatch("Poznań");
   });
 
   it("get weather after the button is clicked", async () => {
@@ -43,8 +43,8 @@ describe("AirAppWeather", () => {
     wrapper.vm.city = city;
     await flushPromises();
 
-    const checkButton = wrapper.find(`.weather__button`);
-    checkButton.trigger("click");
+    const checkButtonElm = wrapper.find(`.weather__button`);
+    checkButtonElm.trigger("click");
     await flushPromises();
     expect(wrapper.vm.currentWeather).toMatchObject(currentWeather);
   });

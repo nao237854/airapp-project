@@ -4,17 +4,17 @@
       {{ data.current.temp }}<span style="font-weight:normal">°</span>C
     </div>
     <div class="weather-box__details">
-      <div class="weather-box__detail">
+      <div data-key="date" class="weather-box__detail">
         <div class="weather-box__detail-property">Date:</div>
         <div class="weather-box__detail-value">{{ data.current.parsedDt }}</div>
       </div>
-      <div class="weather-box__detail">
+      <div data-key="location" class="weather-box__detail">
         <div class="weather-box__detail-property">Location:</div>
         <div class="weather-box__detail-value">
           {{ data.city.name }}, {{ data.city.countryCode }}
         </div>
       </div>
-      <div class="weather-box__detail">
+      <div data-key="description" class="weather-box__detail">
         <div class="weather-box__detail-property">Description:</div>
         <div class="weather-box__detail-value">
           {{ data.current.weather[0].description }}
