@@ -30,7 +30,11 @@ export default {
         const { data } = await this.$http.get(
           `https://api.openweathermap.org/data/2.5/onecall?lat=${city.lat}&lon=${city.lng}&units=metric&exclude=daily,minutely&appid=${process.env.VUE_APP_OPENWEATHERMAP_API_KEY}`
         );
-        return { current: data.current, city, hourly: data.hourly };
+        return {
+          current: data.current,
+          city: { ...city },
+          hourly: data.hourly
+        };
       } catch (error) {
         return "";
       }

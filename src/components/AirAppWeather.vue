@@ -48,7 +48,7 @@ export default {
     }
   },
   watch: {
-    data: async function(nv) {
+    data: function(nv) {
       if (nv) {
         this.city = nv;
         this.cityLabel = nv.name;
@@ -75,7 +75,7 @@ export default {
         const { data } = await this.$http.get(
           `https://api.openweathermap.org/data/2.5/onecall?lat=${city.lat}&lon=${city.lng}&units=metric&exclude=daily,minutely,hourly&appid=${process.env.VUE_APP_OPENWEATHERMAP_API_KEY}`
         );
-        this.currentWeather = { current: data.current, city };
+        this.currentWeather = { current: data.current, city: { ...city } };
       } catch (error) {
         return null;
       }
